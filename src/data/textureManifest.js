@@ -1,4 +1,4 @@
-/**
+﻿/**
  * NASA 3D Solar System — Official Three.js & 2K/4K PBR Texture Manifest
  * Loads official Three.js Earth & Moon textures (`earth_atmos_2048.jpg`, `earth_normal_2048.jpg`,
  * `earth_specular_2048.jpg`, `earth_clouds_1024.png`, `moon_1024.jpg`) and 2K Solar System Scope maps
@@ -8,31 +8,32 @@ import * as THREE from 'three';
 
 const THREE_MASTER_PLANETS = 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets';
 const JSDELIVR_PLANETS = 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r170/examples/textures/planets';
-const WIKI_FILEPATH = 'https://commons.wikimedia.org/wiki/Special:FilePath';
+// Direct upload.wikimedia.org URLs: Special:FilePath redirect hops lack CORS headers and break WebGL texture loading.
+const WIKI_UPLOAD = 'https://upload.wikimedia.org/wikipedia/commons';
 
 export const TEXTURE_MANIFEST = {
   sun: {
     albedo: [
-      `${WIKI_FILEPATH}/Solarsystemscope_texture_2k_sun.jpg?width=2048`
+      `${WIKI_UPLOAD}/c/cb/Solarsystemscope_texture_2k_sun.jpg`
     ]
   },
   mercury: {
     albedo: [
-      `${WIKI_FILEPATH}/Solarsystemscope_texture_2k_mercury.jpg?width=2048`,
+      `${WIKI_UPLOAD}/9/92/Solarsystemscope_texture_2k_mercury.jpg`,
       `${THREE_MASTER_PLANETS}/moon_1024.jpg`
     ],
     bump: [
-      `${WIKI_FILEPATH}/Solarsystemscope_texture_2k_mercury.jpg?width=2048`,
+      `${WIKI_UPLOAD}/9/92/Solarsystemscope_texture_2k_mercury.jpg`,
       `${THREE_MASTER_PLANETS}/moon_1024.jpg`
     ]
   },
   venus: {
     albedo: [
-      `${WIKI_FILEPATH}/Solarsystemscope_texture_2k_venus_surface.jpg?width=2048`,
-      `${WIKI_FILEPATH}/Solarsystemscope_texture_2k_venus_atmosphere.jpg?width=2048`
+      `${WIKI_UPLOAD}/4/40/Solarsystemscope_texture_2k_venus_surface.jpg`,
+      `${WIKI_UPLOAD}/6/63/Solarsystemscope_texture_2k_venus_atmosphere.jpg`
     ],
     bump: [
-      `${WIKI_FILEPATH}/Solarsystemscope_texture_2k_venus_surface.jpg?width=2048`
+      `${WIKI_UPLOAD}/4/40/Solarsystemscope_texture_2k_venus_surface.jpg`
     ]
   },
   earth: {
@@ -73,37 +74,37 @@ export const TEXTURE_MANIFEST = {
   },
   mars: {
     albedo: [
-      `${WIKI_FILEPATH}/Solarsystemscope_texture_2k_mars.jpg?width=2048`
+      `${WIKI_UPLOAD}/4/46/Solarsystemscope_texture_2k_mars.jpg`
     ],
     bump: [
-      `${WIKI_FILEPATH}/Solarsystemscope_texture_2k_mars.jpg?width=2048`
+      `${WIKI_UPLOAD}/4/46/Solarsystemscope_texture_2k_mars.jpg`
     ]
   },
   jupiter: {
     albedo: [
-      `${WIKI_FILEPATH}/Solarsystemscope_texture_2k_jupiter.jpg?width=2048`
+      `${WIKI_UPLOAD}/b/be/Solarsystemscope_texture_2k_jupiter.jpg`
     ],
     bump: null
   },
   saturn: {
     albedo: [
-      `${WIKI_FILEPATH}/Solarsystemscope_texture_2k_saturn.jpg?width=2048`
+      `${WIKI_UPLOAD}/e/ea/Solarsystemscope_texture_2k_saturn.jpg`
     ],
     bump: null,
     ring: [
-      `${WIKI_FILEPATH}/Solarsystemscope_texture_2k_saturn_ring_alpha.png?width=2048`
+      `${WIKI_UPLOAD}/7/7d/Solarsystemscope_texture_2k_saturn_ring_alpha.png`
     ]
   },
   uranus: {
     albedo: [
-      `${WIKI_FILEPATH}/Solarsystemscope_texture_2k_uranus.jpg?width=2048`
+      `${WIKI_UPLOAD}/9/95/Solarsystemscope_texture_2k_uranus.jpg`
     ],
     bump: null,
     ring: null
   },
   neptune: {
     albedo: [
-      `${WIKI_FILEPATH}/Solarsystemscope_texture_2k_neptune.jpg?width=2048`
+      `${WIKI_UPLOAD}/1/1e/Solarsystemscope_texture_2k_neptune.jpg`
     ],
     bump: null
   },
@@ -1097,3 +1098,4 @@ export function disposeTextureCache() {
 }
 
 export default TEXTURE_MANIFEST;
+
