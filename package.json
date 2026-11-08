@@ -1,0 +1,20 @@
+{
+  "name": "nasa-3d-solar-system",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "NASA Eyes on the Solar System - 3D Interactive WebGL Experience (120 FPS Target)",
+  "scripts": {
+    "dev": "vite --open",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "gsap": "^3.12.5",
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.11"
+  }
+}
+

@@ -1,0 +1,708 @@
+/**
+ * NASA EYES // Apple VisionOS Liquid Glass — 4K Sci-Fi HUD Stylesheet (Giai đoạn 8)
+ * Typography: Space Grotesk (Headers), Inter (Body), JetBrains Mono (Tabular Telemetry)
+ * Context-Aware Telemetry Panel: Auto Hide/Slide-In & Orbit Drag Dimming
+ */
+
+:root {
+  --hud-bg: rgba(10, 16, 30, 0.42);
+  --hud-border: rgba(255, 255, 255, 0.20);
+  --hud-border-bright: rgba(255, 255, 255, 0.48);
+  --hud-cyan: #38bdf8;
+  --hud-emerald: #34d399;
+  --hud-amber: #fbbf24;
+  --hud-orange: #f97316;
+  --hud-rose: #fb7185;
+  --hud-text: #f8fafc;
+  --hud-muted: #cbd5e1;
+  --hud-dim: #94a3b8;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+.hud-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14px 18px;
+  overflow: hidden;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================================
+   TOP HEADER BAR & PERFORMANCE PROFILER (LIQUID GLASS)
+   ============================================================================ */
+.hud-top-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 25;
+  flex-wrap: wrap;
+}
+
+.hud-brand-cluster {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 9px 16px;
+  pointer-events: auto;
+}
+
+.hud-nasa-badge {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.hud-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--hud-emerald);
+  box-shadow: 0 0 10px var(--hud-emerald);
+  animation: hudPulseDot 2s ease-in-out infinite;
+}
+
+@keyframes hudPulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.85); }
+}
+
+.hud-brand-title {
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--hud-text);
+  text-transform: uppercase;
+}
+
+.hud-brand-sub {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: #bae6fd;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+.hud-top-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-left: 4px;
+  padding-left: 12px;
+  border-left: 1px solid rgba(255, 255, 255, 0.20);
+}
+
+.hud-btn {
+  appearance: none;
+  color: var(--hud-text);
+  font-family: var(--font-display);
+  font-size: 0.71rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 6px 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+/* Compact FPS Liquid Glass Pill Badge */
+.hud-fps-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  pointer-events: auto;
+}
+
+.hud-fps-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--hud-muted);
+  text-transform: uppercase;
+}
+
+.hud-fps-value {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--hud-emerald);
+  font-variant-numeric: tabular-nums;
+  min-width: 22px;
+  text-align: right;
+}
+
+.hud-fps-value.warn {
+  color: var(--hud-amber);
+}
+
+/* WebGL Context Banner */
+.hud-context-banner {
+  position: fixed;
+  top: 76px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 18px;
+  border-radius: 14px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  background: rgba(127, 29, 29, 0.92);
+  border: 1px solid #f87171;
+  color: #fef2f2;
+  z-index: 100;
+  pointer-events: auto;
+}
+
+.hud-context-banner.restored {
+  background: rgba(6, 78, 59, 0.92);
+  border-color: #34d399;
+  color: #ecfdf5;
+}
+
+.hud-context-banner.hidden {
+  display: none;
+}
+
+/* ============================================================================
+   RIGHT CONTEXT-AWARE TELEMETRY & REAL PHOTO GALLERY PANEL (LIQUID GLASS)
+   ============================================================================ */
+.hud-telemetry-aside {
+  position: absolute;
+  top: 74px;
+  right: 18px;
+  bottom: 136px;
+  width: 382px;
+  max-width: calc(100vw - 36px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 18;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0) scale(1);
+  transition:
+    opacity 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hud-telemetry-aside.telemetry-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(28px, 0, 0) scale(0.98);
+}
+
+.hud-telemetry-aside.telemetry-dragging {
+  opacity: 0.25;
+}
+
+.hud-telemetry-header {
+  padding: 14px 16px 11px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.hud-body-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hud-body-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--hud-cyan);
+  box-shadow: 0 0 12px var(--hud-cyan);
+  flex-shrink: 0;
+}
+
+.hud-body-name-vi {
+  font-family: var(--font-display);
+  font-size: 1.14rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.15;
+}
+
+.hud-body-name-en {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: #bae6fd;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hud-body-class {
+  margin-top: 6px;
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: #f0f9ff;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+.hud-telemetry-body {
+  padding: 13px 16px 18px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.32) transparent;
+}
+
+.hud-telemetry-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.hud-telemetry-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.32);
+  border-radius: 999px;
+}
+
+.hud-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.hud-stat-card {
+  background: rgba(8, 14, 28, 0.44);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.22);
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+
+.hud-stat-label {
+  font-size: 0.59rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hud-muted);
+  margin-bottom: 2px;
+}
+
+.hud-stat-val {
+  font-family: var(--font-mono);
+  font-size: 0.77rem;
+  font-weight: 600;
+  color: var(--hud-text);
+  font-variant-numeric: tabular-nums;
+  word-break: break-word;
+}
+
+.hud-stat-val.highlight {
+  color: #7dd3fc;
+}
+
+.hud-section-box {
+  background: rgba(8, 14, 28, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+  padding: 11px 13px;
+}
+
+.hud-section-title {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: #bae6fd;
+  margin-bottom: 8px;
+}
+
+.hud-desc-text {
+  font-size: 0.76rem;
+  line-height: 1.54;
+  color: #e2e8f0;
+}
+
+/* Authentic Space Photography Gallery Cards */
+.hud-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.hud-gallery-card {
+  appearance: none;
+  background: rgba(8, 13, 26, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+  padding: 0;
+  color: var(--hud-text);
+}
+
+.hud-gallery-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.52);
+  box-shadow: 0 8px 24px rgba(56, 189, 248, 0.28);
+}
+
+.hud-gallery-thumb-wrap {
+  width: 100%;
+  height: 94px;
+  position: relative;
+  overflow: hidden;
+  background: #050914;
+}
+
+.hud-gallery-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.32s ease;
+}
+
+.hud-gallery-card:hover .hud-gallery-thumb {
+  transform: scale(1.06);
+}
+
+.hud-gallery-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: rgba(6, 10, 20, 0.76);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  color: #f0f9ff;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+
+.hud-gallery-info {
+  padding: 7px 9px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hud-gallery-title {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #f8fafc;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.hud-gallery-credit {
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  color: #7dd3fc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hud-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.hud-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  color: #f1f5f9;
+  font-variant-numeric: tabular-nums;
+}
+
+.hud-facts-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hud-facts-list li {
+  position: relative;
+  padding-left: 12px;
+  font-size: 0.73rem;
+  line-height: 1.46;
+  color: #e2e8f0;
+}
+
+.hud-facts-list li::before {
+  content: '▹';
+  position: absolute;
+  left: 0;
+  color: #7dd3fc;
+}
+
+.hud-api-status {
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  color: var(--hud-emerald);
+  margin-bottom: 4px;
+}
+
+/* ============================================================================
+   FULL-SCREEN HD LIGHTBOX MODAL FOR REAL SPACE PHOTOGRAPHS
+   ============================================================================ */
+.hud-lightbox-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(3, 6, 14, 0.84);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  pointer-events: auto;
+}
+
+.hud-lightbox-backdrop.hidden {
+  display: none;
+}
+
+.hud-lightbox-modal {
+  width: 960px;
+  max-width: 92vw;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.hud-lightbox-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  max-height: 56vh;
+  background: #02040a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hud-lightbox-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #02040a;
+}
+
+.hud-lightbox-content {
+  padding: 16px 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.hud-lightbox-title {
+  font-family: var(--font-display);
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.hud-lightbox-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.69rem;
+  color: #7dd3fc;
+  font-variant-numeric: tabular-nums;
+}
+
+.hud-lightbox-caption {
+  font-size: 0.85rem;
+  line-height: 1.58;
+  color: #f1f5f9;
+}
+
+.hud-lightbox-source-box {
+  background: rgba(8, 14, 28, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  border-radius: 12px;
+  padding: 9px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hud-lightbox-credit-text {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--hud-emerald);
+}
+
+.hud-lightbox-source-link {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #7dd3fc;
+  text-decoration: underline;
+}
+
+.hud-lightbox-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 4px;
+}
+
+/* ============================================================================
+   BOTTOM CONTROLS: LIQUID GLASS TIME WARP BAR & CELESTIAL DOCK
+   ============================================================================ */
+.hud-bottom-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 20;
+}
+
+.hud-timewarp-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 9px;
+  padding: 7px 16px;
+  pointer-events: auto;
+}
+
+.hud-sim-clock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
+  font-variant-numeric: tabular-nums;
+  color: #f1f5f9;
+  padding-right: 10px;
+  border-right: 1px solid rgba(255, 255, 255, 0.20);
+}
+
+.hud-clock-badge {
+  font-size: 0.6rem;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.22);
+  border: 1px solid rgba(125, 211, 252, 0.35);
+  color: #e0f2fe;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.hud-warp-buttons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.hud-warp-btn {
+  appearance: none;
+  color: var(--hud-text);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  padding: 4px 9px;
+  cursor: pointer;
+}
+
+/* Celestial Planet & Standalone Moon Dock */
+.hud-planet-dock {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  max-width: 100%;
+  overflow-x: auto;
+  pointer-events: auto;
+}
+
+.hud-dock-item {
+  appearance: none;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--hud-text);
+  flex-shrink: 0;
+}
+
+.hud-dock-orb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.hud-dock-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.hud-dock-name {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.hud-dock-au {
+  font-family: var(--font-mono);
+  font-size: 0.57rem;
+  color: var(--hud-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 1100px) {
+  .hud-telemetry-aside {
+    width: 330px;
+  }
+}

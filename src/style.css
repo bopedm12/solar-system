@@ -1,0 +1,52 @@
+/**
+ * NASA 3D Solar System — Apple VisionOS Liquid Glass Core Stylesheet (`src/style.css`)
+ * Hardware-accelerated (`translate3d`, `will-change: transform, opacity`) for 60-120 FPS.
+ */
+
+.liquid-glass {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.04) 50%,
+    rgba(130, 185, 255, 0.07) 100%
+  );
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow:
+    0 16px 40px -8px rgba(0, 0, 0, 0.65),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -1px 2px 0 rgba(120, 180, 255, 0.15);
+  border-radius: 22px;
+  color: rgba(255, 255, 255, 0.95);
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.liquid-glass-pill {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.45);
+  border-radius: 9999px;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-glass-pill:hover,
+.liquid-glass-pill.active {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.26) 0%, rgba(110, 185, 255, 0.18) 100%);
+  border-color: rgba(255, 255, 255, 0.48);
+  box-shadow:
+    0 6px 22px rgba(70, 150, 255, 0.32),
+    inset 0 1px 1px rgba(255, 255, 255, 0.72);
+  transform: translateY(-1px);
+}
+
